@@ -10,60 +10,74 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="332dp"
+        android:layout_marginEnd="152dp"
         android:text="Entrenar"
-        tools:layout_editor_absoluteX="145dp"
-        tools:layout_editor_absoluteY="137dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="96dp"
+        android:layout_marginTop="36dp"
         android:text="Seleccionar Imagenes"
-        tools:layout_editor_absoluteX="98dp"
-        tools:layout_editor_absoluteY="39dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
+        android:layout_marginEnd="108dp"
+        android:layout_marginTop="100dp"
         android:text="0 imagenes seleccionadas"
-        tools:layout_editor_absoluteX="109dp"
-        tools:layout_editor_absoluteY="98dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="232dp"
+        android:layout_marginEnd="140dp"
         android:text="Tomar Foto"
-        tools:layout_editor_absoluteX="137dp"
-        tools:layout_editor_absoluteY="240dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
+        android:layout_marginBottom="88dp"
+        android:layout_marginEnd="120dp"
         android:text="Foto corresponde a XXX"
-        tools:layout_editor_absoluteX="104dp"
-        tools:layout_editor_absoluteY="396dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher_round"
-        tools:layout_editor_absoluteX="156dp"
-        tools:layout_editor_absoluteY="301dp" />
+        android:layout_marginBottom="128dp"
+        android:layout_marginEnd="156dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@mipmap/ic_launcher_round" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="309dp"
         android:layout_height="23dp"
+        android:layout_marginBottom="292dp"
+        android:layout_marginEnd="36dp"
         android:max="100"
         android:progress="50"
         android:visibility="visible"
-        tools:layout_editor_absoluteX="38dp"
-        tools:layout_editor_absoluteY="195dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="visible" />
 
 </android.support.constraint.ConstraintLayout>
