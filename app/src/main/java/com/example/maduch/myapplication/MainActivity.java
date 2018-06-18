@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     int i = 0;
 
 
-
     String[] names = {"Charly","Eduardo","Fer"};
 
 
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
         this.imageView = (ImageView) this.findViewById(R.id.image_pic);
         photoButton = (Button) this.findViewById(R.id.button_search);
+
         photoButton.setVisibility(View.INVISIBLE);
         Spinner spin = (Spinner) findViewById(R.id.valid_names);
         spin.setOnItemSelectedListener(this);
@@ -114,13 +114,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case 2: result.setText("Fer"); break;
             default: break;
         }
+
         photoButton.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
-    // TODO Auto-generated method stub
+        // TODO Auto-generated method stub
 
     }
 }
-
