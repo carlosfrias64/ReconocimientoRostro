@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">My Application</string>
+
+    <string-array name="people_name">
+        <item>Charly</item>
+        <item>Corbal</item>
+        <item>Fer</item>
+    </string-array>
 </resources>
