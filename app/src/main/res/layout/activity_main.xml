@@ -26,7 +26,8 @@
         android:layout_height="73dp"
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="132dp"
-        android:text="Search"
+        android:text="Face Recognition"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:clickable="true" />
