@@ -1,4 +1,5 @@
 <resources>
+<<<<<<< HEAD
     <string name="app_name">My Application</string>
 
     <string-array name="people_name">
@@ -6,4 +7,7 @@
         <item>Corbal</item>
         <item>Fer</item>
     </string-array>
+=======
+    <string name="app_name">Reconocimiento Rostro</string>
+>>>>>>> 10aef08904e3863b94f99fbdc1aa344efae3dc85
 </resources>
