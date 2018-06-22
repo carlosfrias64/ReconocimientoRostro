@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             boolean pass = false;
             if(         (personName.equals("carlos") && person == 0)
                     ||  (personName.equals("corbal") && person == 1)
-                    ||  (personName.equals("fer") && person == 0)       )
+                    ||  (personName.equals("fer") && person == 2)       )
             {
                 pass = true;
             }
