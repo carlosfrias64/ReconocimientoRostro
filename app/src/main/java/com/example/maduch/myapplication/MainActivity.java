@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final int INPUT_SIZE = 224;
     private static final int IMAGE_MEAN = 117;
     private static final float IMAGE_STD = 1;
-    private static final String INPUT_NAME = "input";
+    private static final String INPUT_NAME = "Placeholder";
     private static final String OUTPUT_NAME = "final_result"; //output
 
 
@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             imageView.setImageBitmap(photo);
             final List<Classifier.Recognition> results = classifier.recognizeImage(photo);
             //result.setText(results.toString());
+            String personName = "olis";
             for (final Recognition recog : results) {
 
                 /*switch(recog.getId()){
@@ -175,9 +176,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     case 6: person_id = 2; break;
                     default: break;
                 }*/
-                result.setText(recog.getTitle() + ": " + recog.getConfidence());
-                //break;
+                personName = recog.getTitle();
+                result.setText(personName + ": " + recog.getConfidence());
+
+                break;
             }
+
+            boolean pass = false;
+            if(         (personName.equals("carlos") && person == 0)
+                    ||  (personName.equals("corbal") && person == 1)
+                    ||  (personName.equals("fer") && person == 0)       )
+            {
+                pass = true;
+            }
+
+            if(!pass)
+            {
+                sp.play(soundID, volume, volume, 1, -1, 1f);
+            }
+            else
+            {
+                sp.stop(soundID);
+            }
+
         }
     }
 
@@ -189,12 +210,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //mPlayer.prepare();
         //mPlayer.start();
         person = position;
-        switch(position){
-            case 0: sp.stop(soundID);break;//result.setText("Charly"); break;
-            case 1: sp.play(soundID, volume, volume, 1, -1, 1f);plays=true;break;//result.setText("Eduardo"); break;
-            case 2: sp.stop(soundID);break;//result.setText("Fer"); break;
-            default: break;//sp.stop(soundId);break;
-        }
+
+        //switch(position){
+        //    case 0: sp.stop(soundID);break;//result.setText("Charly"); break;
+        //    case 1: sp.play(soundID, volume, volume, 1, -1, 1f);plays=true;break;//result.setText("Eduardo"); break;
+        //    case 2: sp.stop(soundID);break;//result.setText("Fer"); break;
+        //    default: break;//sp.stop(soundId);break;
+        //}
 
         photoButton.setVisibility(View.VISIBLE);
     }
