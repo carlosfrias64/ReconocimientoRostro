@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
             else
             {
-                sp.stop(soundID);
+                sp.pause(soundID);
             }
 
         }
