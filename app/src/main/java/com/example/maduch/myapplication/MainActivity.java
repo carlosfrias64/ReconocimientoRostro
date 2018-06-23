@@ -8,6 +8,7 @@ import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.Manifest;
 import android.app.Activity;
@@ -36,11 +37,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private static final int INPUT_SIZE = 224;
+    private static final int INPUT_SIZE = 250;
     private static final int IMAGE_MEAN = 117;
     private static final float IMAGE_STD = 1;
     private static final String INPUT_NAME = "Placeholder";
     private static final String OUTPUT_NAME = "final_result"; //output
+    private static final String TAG = "MainActivity";
 
 
     private static final String MODEL_FILE = "file:///android_asset/retrained_graph.pb";
@@ -57,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     boolean plays = false, loaded = false;
     float actVolume, maxVolume, volume;
     AudioManager audioManager;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private Bitmap mImageBitmap;
+    private String mCurrentPhotoPath;
 
     //SoundPool sp = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
     //Context context = getApplicationContext();
@@ -75,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         // AudioManager audio settings for adjusting the volume
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -125,12 +132,42 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     requestPermissions(new String[]{Manifest.permission.CAMERA},
                             MY_CAMERA_PERMISSION_CODE);
                 } else {
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                    Intent cameraIntent = new
+                            Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                        // Create the File where the photo should go
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            // Error occurred while creating the File
+                            //Log.i(TAG, "IOException");
+                            Log.i("S", ex.toString());
+                        }
+                        // Continue only if the File was successfully created
+                        if (photoFile != null) {
+                            Uri uri = FileProvider.getUriForFile(getApplicationContext(), getPackageName()+".fileprovider", photoFile);
+                            cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
+                            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                        }
+                    }
                 }
             }
         });
     }
+
+    public  boolean isStoragePermissionGranted() {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG,"Permission is granted");
+                return true;
+            } else {
+
+                Log.v(TAG,"Permission is revoked");
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -150,7 +187,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        classifier =
+        int person_id = 0;
+
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            try {
+                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
+                mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, INPUT_SIZE, INPUT_SIZE, true);
+                imageView.setImageBitmap(mImageBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            classifier =
                 TensorFlowImageClassifier.create(
                         getAssets(),
                         MODEL_FILE,
@@ -161,11 +209,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         INPUT_NAME,
                         OUTPUT_NAME);
 
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            int person_id = 0;
-            imageView.setImageBitmap(photo);
-            final List<Classifier.Recognition> results = classifier.recognizeImage(photo);
+
+
+            imageView.setImageBitmap(mImageBitmap);
+            final List<Classifier.Recognition> results = classifier.recognizeImage(mImageBitmap);
             //result.setText(results.toString());
             String personName = "olis";
             for (final Recognition recog : results) {
@@ -225,5 +272,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
 
+    }
+
+    private File createImageFile() throws IOException {
+        if(isStoragePermissionGranted()) {
+            // Create an image file name
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String imageFileName = "JPEG_" + timeStamp + "_";
+            File storageDir = getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES);
+            File image = File.createTempFile(
+                    imageFileName,  // prefix
+                    ".jpg",         // suffix
+                    storageDir      // directory
+            );
+
+            // Save a file: path for use with ACTION_VIEW intents
+            mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+            return image;
+        }
+        else {
+            throw new IOException("Error obtaining permission");
+        }
     }
 }
