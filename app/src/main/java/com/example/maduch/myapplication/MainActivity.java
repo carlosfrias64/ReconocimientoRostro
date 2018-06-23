@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private SoundPool sp;
     private int soundID, person;
-    boolean plays = false, loaded = false;
+    boolean plays = false, loaded = false, playing = false;
     float actVolume, maxVolume, volume;
     AudioManager audioManager;
 
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
         soundID = sp.load(this, R.raw.siren, 1);
-
+        playing = false;
 
 
         this.imageView = (ImageView) this.findViewById(R.id.image_pic);
@@ -239,11 +239,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             if(!pass)
             {
-                sp.play(soundID, volume, volume, 1, -1, 1f);
+                if(!playing)
+                {
+                    sp.play(soundID, volume, volume, 1, -1, 1f);
+                    playing = true;
+                }
             }
             else
             {
-                sp.pause(soundID);
+                if(playing)
+                {
+                    playing = false;
+                    sp.pause(soundID);
+                    soundID = sp.load(this, R.raw.siren, 1);
+                }
             }
 
         }
